@@ -11,3 +11,4 @@
 | `.nix` | nixfmt | Nix expressions |
 | `.sh` | ShellCheck | Shell scripts |
 | `.yml` | yamllint, actionlint | YAML config, GitHub Actions |
+| `LICENSE` | - | Plain text, no linter needed |
