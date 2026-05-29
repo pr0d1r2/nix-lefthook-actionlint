@@ -51,7 +51,7 @@ Lefthook-compatible actionlint wrapper as Nix flake. Filter .yml/.yaml from args
 | T7 | x | CI workflow: 3 platforms via nix-lefthook-ci-action | C2,C8 |
 | T8 | x | README with usage docs | I.remote,I.flake-pkg |
 | T9 | x | yamllint config (.yamllint.yml) | I.self-hooks |
-| T10 | . | Create GitHub repo and push | I.remote |
+| T10 | x | Create GitHub repo and push | I.remote |
 | T11 | . | Verify CI passes on all 3 platforms | C2,T7 |
 
 ## S.B Bugs
