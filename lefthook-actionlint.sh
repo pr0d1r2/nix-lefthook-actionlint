@@ -2,7 +2,7 @@
 # Lefthook-compatible actionlint wrapper.
 # Usage: lefthook-actionlint file1.yml [file2.yaml ...]
 # Non-.yml/.yaml files are skipped silently.
-# NOTE: sourced by writeShellApplication — no shebang or set needed.
+# NOTE: sourced by writeShellApplication --no shebang or set needed.
 
 if [ $# -eq 0 ]; then
     exit 0

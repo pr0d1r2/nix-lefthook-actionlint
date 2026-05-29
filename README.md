@@ -12,7 +12,7 @@ Filters `.yml` and `.yaml` files from staged arguments and runs actionlint on th
 
 ### Option A: Lefthook remote (recommended)
 
-Add to your `lefthook.yml` — no flake input needed, just `pkgs.actionlint` in your devShell:
+Add to your `lefthook.yml` -- no flake input needed, just `pkgs.actionlint` in your devShell:
 
 ```yaml
 remotes:
@@ -59,7 +59,7 @@ export LEFTHOOK_ACTIONLINT_TIMEOUT=60
 
 ## Development
 
-The repo includes an `.envrc` for [direnv](https://direnv.net/) — entering the directory automatically loads the devShell with all dependencies:
+The repo includes an `.envrc` for [direnv](https://direnv.net/) -- entering the directory automatically loads the devShell with all dependencies:
 
 ```bash
 cd nix-lefthook-actionlint  # direnv loads the flake
