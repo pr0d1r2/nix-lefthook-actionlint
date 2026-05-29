@@ -1,3 +1,3 @@
 # nix-lefthook-actionlint
 
-@agent/set.md
+Lefthook-compatible actionlint wrapper, packaged as a Nix flake.
