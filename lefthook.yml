@@ -56,6 +56,42 @@ remotes:
     ref: main
     configs:
       - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-gitleaks
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-shellcheck
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-markdownlint
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-ascii-only
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-execute-permissions
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-file-size-check
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-nix-flake-eval
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-nix-no-embedded-shell
+    ref: main
+    configs:
+      - lefthook-remote.yml
+  - git_url: https://github.com/pr0d1r2/nix-lefthook-linter-coverage
+    ref: main
+    configs:
+      - lefthook-remote.yml
 
 pre-commit:
   parallel: true
@@ -63,6 +99,9 @@ pre-commit:
     actionlint:
       glob: ".github/workflows/*.{yml,yaml}"
       run: timeout ${LEFTHOOK_ACTIONLINT_TIMEOUT:-30} lefthook-actionlint {staged_files}
+    nix-flake-eval:
+      env:
+        LEFTHOOK_NIX_FLAKE_EVAL_ATTR: ".#packages"
 
 pre-push:
   parallel: true

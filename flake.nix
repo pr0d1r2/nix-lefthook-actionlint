@@ -12,6 +12,14 @@
       url = "github:pr0d1r2/nix-dev-shell-agentic";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-lefthook-nix-flake-eval = {
+      url = "github:pr0d1r2/nix-lefthook-nix-flake-eval";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-lefthook-linter-coverage = {
+      url = "github:pr0d1r2/nix-lefthook-linter-coverage";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
