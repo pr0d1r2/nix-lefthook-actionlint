@@ -1,0 +1,18 @@
+# Repo-local checks carried through from vendored lefthook.yml (#126).
+---
+
+pre-commit:
+  commands:
+    actionlint:
+      glob: ".github/workflows/*.{yml,yaml}"
+      run: timeout ${LEFTHOOK_ACTIONLINT_TIMEOUT:-30} lefthook-actionlint {staged_files}
+    nix-flake-eval:
+      env:
+        LEFTHOOK_NIX_FLAKE_EVAL_ATTR: ".#packages"
+
+
+pre-push:
+  commands:
+    actionlint:
+      glob: ".github/workflows/*.{yml,yaml}"
+      run: timeout ${LEFTHOOK_ACTIONLINT_TIMEOUT:-30} lefthook-actionlint {push_files}
