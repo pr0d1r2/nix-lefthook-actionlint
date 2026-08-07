@@ -61,3 +61,4 @@ Lefthook-compatible actionlint wrapper as Nix flake. Filter .yml/.yaml from args
 | B1 | 2026-05-29 | lefthook.yml used raw `actionlint` not on PATH outside devShell | Use `lefthook-actionlint` wrapper |
 | B2 | 2026-07-21 | Migration left confirm app and devShell without lefthook-* wrappers on PATH; unused `nix-dev-shell-agentic` input flagged by deadnix; missing `.nix-embedded-shell-allowlist`; shfmt 4-vs-2-space indent | Add `mat.packages` + `self.packages` to confirm app `runtimeInputs` and devShell `basePackages`; remove stale input; add allowlist; fix indent |
 | B3 | 2026-07-28 | Pin refresh grew `flake.lock` beyond the stale 64 KiB file-size limit | Raise the `.lock` limit to 128 KiB while retaining file-size enforcement |
+| B4 | 2026-08-07 | Flake manifest guard rejected helper bindings and an inline outputs attrset | Delegate outputs to `flake/default.nix` and keep the root flake manifest declarative |
