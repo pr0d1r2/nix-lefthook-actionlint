@@ -2,7 +2,7 @@
 
 ## S.G Goal
 
-Lefthook-compatible actionlint wrapper as Nix flake. Filter .yml/.yaml from args, run actionlint, exit 0 when no match. Two consumption modes: lefthook remote (recommended, zero flake config) and flake input.
+Lefthook-compatible actionlint wrapper as Nix flake. Filter YAML args, run actionlint, and exit 0 when no match. Supports lefthook remote (recommended) and flake input.
 
 ## S.C Constraints
 
@@ -11,18 +11,18 @@ Lefthook-compatible actionlint wrapper as Nix flake. Filter .yml/.yaml from args
 - C3: Timeout at lefthook level via `LEFTHOOK_ACTIONLINT_TIMEOUT` env var, default 30s -- script itself has no timeout
 - C4: Non-.yml/.yaml files silently skipped (lefthook passes all staged files)
 - C5: Non-existent files silently skipped (lefthook may pass deleted files)
-- C6: MIT license
-- C7: LLM-generated, validated via lefthook hooks + bats tests + CI
-- C8: Cachix binary cache (`pr0d1r2.cachix.org`) configured in nixConfig for faster builds
-- C9: DevShell via `nix-dev-shell-agentic` -- provides `default` + `ci` shells, bats libs, lefthook
+- C6: MIT
+- C7: LLM-generated, validated via hooks, bats tests + CI
+- C8: Cachix binary cache configured in nixConfig
+- C9: DevShell via `nix-dev-shell-agentic` -- provides shells, bats libs, lefthook
 
 ## S.I Interfaces
 
 - I.cli: `lefthook-actionlint [file ...]` -- main entry point, exit 0 if no yaml files, else exit code from actionlint
 - I.flake-pkg: `packages.<system>.default` -- writeShellApplication with actionlint in runtimeInputs
 - I.flake-dev: `devShells.<system>.{default,ci}` -- via nix-dev-shell-agentic, includes lefthook-actionlint + bats
-- I.remote: `lefthook-remote.yml` -- drop-in lefthook remote config (pre-commit + pre-push) for consumers
-- I.self-hooks: `lefthook.yml` -- dev hooks for this repo (includes 15 lefthook remotes for linting)
+- I.remote: `lefthook-remote.yml` -- drop-in consumer config
+- I.self-hooks: `lefthook.yml` -- this repo's dev hooks
 - I.env: `LEFTHOOK_ACTIONLINT_TIMEOUT` -- seconds, default 30, used in lefthook configs
 - I.cache: `nixConfig.extra-substituters` -- cachix substituter for pre-built packages
 
@@ -62,4 +62,5 @@ Lefthook-compatible actionlint wrapper as Nix flake. Filter .yml/.yaml from args
 | B2 | 2026-07-21 | Migration left confirm app and devShell without lefthook-* wrappers on PATH; unused `nix-dev-shell-agentic` input flagged by deadnix; missing `.nix-embedded-shell-allowlist`; shfmt 4-vs-2-space indent | Add `mat.packages` + `self.packages` to confirm app `runtimeInputs` and devShell `basePackages`; remove stale input; add allowlist; fix indent |
 | B3 | 2026-07-28 | Pin refresh grew `flake.lock` beyond the stale 64 KiB file-size limit | Raise the `.lock` limit to 128 KiB while retaining file-size enforcement |
 | B4 | 2026-08-07 | Flake manifest guard rejected helper bindings and an inline outputs attrset | Delegate outputs to `flake/default.nix` and keep the root flake manifest declarative |
-| B5 | 2026-08-08 | Root `flake.nix` did not merge `flake/default.nix`, leaving `lefthook-actionlint` out of the devShell and confirm app PATH | Merge the delegated project outputs into the standard consumer-flake outputs |
+| B5 | 2026-08-08 | Root `flake.nix` did not merge `flake/default.nix`, leaving the wrapper out of devShell and confirm PATH | Merge delegated outputs into consumer-flake outputs |
+| B6 | 2026-08-08 | Required B5 history entry pushed SPEC.md past the 4 KiB markdown limit | Compact redundant SPEC text while retaining the limit |
