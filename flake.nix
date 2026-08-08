@@ -21,7 +21,7 @@
       set-and-setting,
       ...
     }:
-    set-and-setting.lib.mkConsumerFlake {
+    (set-and-setting.lib.mkConsumerFlake {
       inherit self nixpkgs set-and-setting;
       fragments = [
         "base"
@@ -32,5 +32,6 @@
         "yaml"
       ];
       src = ./.;
-    };
+    })
+    // (import ./flake/default.nix { inherit self nixpkgs set-and-setting; });
 }
