@@ -5,3 +5,4 @@ result-*
 .direnv/
 .markdownlint.yml
 .yamllint.yml
+lefthook.yml
