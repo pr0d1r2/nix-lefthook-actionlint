@@ -73,9 +73,10 @@
       # locally until the shared helper is updated.
       actionlintCheck =
         let
-          workflowFiles = nixpkgs.lib.sources.sourceByRegex
-            (nixpkgs.lib.sources.sourceFilesBySuffices ./.. [ ".yml" ".yaml" ])
-            [ "^\\.github/workflows/.*" ];
+          workflowFiles = nixpkgs.lib.sources.sourceByRegex (nixpkgs.lib.sources.sourceFilesBySuffices ./.. [
+            ".yml"
+            ".yaml"
+          ]) [ "^\\.github/workflows/.*" ];
         in
         pkgs.runCommand "actionlint-check" { nativeBuildInputs = [ pkgs.findutils ]; } ''
           cd ${workflowFiles}
@@ -95,7 +96,9 @@
       fragments = checkFragments;
       src = ./..;
     })
-    // { actionlint = actionlintCheck; }
+    // {
+      actionlint = actionlintCheck;
+    }
     // {
       dep-graph = set-and-setting.lib.mkDepGraphCheck {
         inherit pkgs;
