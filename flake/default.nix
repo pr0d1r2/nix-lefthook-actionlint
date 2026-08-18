@@ -66,11 +66,36 @@
         "markdown"
         "yaml"
       ];
+      checkFragments = builtins.filter (fragment: fragment != "actions") fragments;
+      # set-and-setting's mkActionlintCheck currently passes a scalar regex to
+      # nixpkgs' sourceByRegex, whose current API requires a list of regexes.
+      # Keep the actions check enabled, but provide the compatible equivalent
+      # locally until the shared helper is updated.
+      actionlintCheck =
+        let
+          workflowFiles = nixpkgs.lib.sources.sourceByRegex
+            (nixpkgs.lib.sources.sourceFilesBySuffices ./.. [ ".yml" ".yaml" ])
+            [ "^\\.github/workflows/.*" ];
+        in
+        pkgs.runCommand "actionlint-check" { nativeBuildInputs = [ pkgs.findutils ]; } ''
+          cd ${workflowFiles}
+          mapfile -t matches < <(find . -type f | sort)
+          if [ ''${#matches[@]} -eq 0 ]; then
+            echo "actionlint: no matching files, nothing to check"
+            touch $out
+            exit 0
+          fi
+          ${nixpkgs.lib.getExe self.packages.${pkgs.stdenv.hostPlatform.system}.default} "''${matches[@]}"
+          echo "actionlint: PASS (''${#matches[@]} files)"
+          touch $out
+        '';
     in
     (set-and-setting.lib.checksFor {
-      inherit pkgs fragments;
+      inherit pkgs;
+      fragments = checkFragments;
       src = ./..;
     })
+    // { actionlint = actionlintCheck; }
     // {
       dep-graph = set-and-setting.lib.mkDepGraphCheck {
         inherit pkgs;
