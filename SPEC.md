@@ -64,3 +64,8 @@ Lefthook-compatible actionlint wrapper as Nix flake. Filter YAML args, run actio
 | B4 | 2026-08-07 | Flake manifest guard rejected helper bindings and an inline outputs attrset | Delegate outputs to `flake/default.nix` and keep the root flake manifest declarative |
 | B5 | 2026-08-08 | Root `flake.nix` did not merge `flake/default.nix`, leaving the wrapper out of devShell and confirm PATH | Merge delegated outputs into consumer-flake outputs |
 | B6 | 2026-08-08 | Required B5 history entry pushed SPEC.md past the 4 KiB markdown limit | Compact redundant SPEC text while retaining the limit |
+| B7 | 2026-08-18 | Generated lefthook configuration was absent and fragment lists omitted detected GitHub Actions hooks | Include the actions fragment everywhere and commit the generated lefthook.yml |
+| B8 | 2026-08-18 | Guardrails rejected scalar lefthook glob patterns where the current schema requires lists | Encode every generated hook glob as a one-item list |
+| B9 | 2026-08-18 | Shared actionlint check passed a scalar regex to the current nixpkgs `sourceByRegex` API, preventing flake evaluation | Keep the actions check enabled with a local equivalent using the list-valued regex API |
+| B10 | 2026-08-18 | Linter-coverage guard required its exemptions manifest, but the repository did not include one | Add the empty `config/linter-coverage-exemptions.yml` manifest |
+| B11 | 2026-08-18 | Nix formatting and the required bug-history entry pushed `flake/default.nix` and `SPEC.md` beyond their 4 KiB limits | Raise only the `.nix` and `.md` limits to 8 KiB while retaining file-size enforcement |
