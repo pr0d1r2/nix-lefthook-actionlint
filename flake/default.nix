@@ -58,6 +58,7 @@
         set-and-setting.lib.mkDevShells {
           inherit pkgs;
           basePackages = mat.packages ++ [
+            pkgs.actionlint
             self.packages.${sys}.default
             self.packages.${sys}.tdd-order-bats
           ];
@@ -160,6 +161,7 @@
             ]
             ++ mat.packages
             ++ [
+              pkgs.actionlint
               self.packages.${sys}.default
               self.packages.${sys}.tdd-order-bats
             ];
