@@ -52,7 +52,7 @@ Lefthook-compatible actionlint wrapper as Nix flake. Filter YAML args, run actio
 | T8 | x | README with usage docs | I.remote,I.flake-pkg |
 | T9 | x | yamllint config (.yamllint.yml) | I.self-hooks |
 | T10 | x | Create GitHub repo and push | I.remote |
-| T11 | . | Verify CI passes on all 3 platforms | C2,T7 |
+| T11 | x | Verify CI passes on all 3 platforms | C2,T7 |
 
 ## S.B Bugs
 
