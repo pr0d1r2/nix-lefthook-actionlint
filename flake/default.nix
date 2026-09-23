@@ -16,7 +16,22 @@
           default = pkgs.writeShellApplication {
             name = "lefthook-actionlint";
             runtimeInputs = [ pkgs.actionlint ];
-            text = builtins.readFile ./../lefthook-actionlint.sh;
+            text =
+              builtins.replaceStrings [ "exec actionlint" ] [ "exec ${nixpkgs.lib.getExe pkgs.actionlint}" ]
+                (builtins.readFile ./../lefthook-actionlint.sh);
+          };
+          tdd-order-bats = pkgs.writeShellApplication {
+            name = "lefthook-tdd-order-bats";
+            runtimeInputs = [
+              pkgs.bats
+              pkgs.findutils
+            ];
+            text = ''
+              mapfile -t bats_files < <(find . -type f -name '*.bats' | sort)
+              if [ ''${#bats_files[@]} -gt 0 ]; then
+                exec bats "''${bats_files[@]}"
+              fi
+            '';
           };
           setting = (set-and-setting.lib.mkSetting { inherit pkgs; }).materialized;
         }
@@ -42,7 +57,12 @@
         in
         set-and-setting.lib.mkDevShells {
           inherit pkgs;
-          basePackages = mat.packages ++ [ self.packages.${sys}.default ];
+          basePackages = mat.packages ++ [
+            pkgs.actionlint
+            pkgs.bats
+            self.packages.${sys}.default
+            self.packages.${sys}.tdd-order-bats
+          ];
           settingHook = ''
             ${self.packages.${sys}.setting}/bin/sync-setting .
             _assemble_out="$(mktemp -d)"
@@ -141,7 +161,11 @@
               pkgs.gnugrep
             ]
             ++ mat.packages
-            ++ [ self.packages.${sys}.default ];
+            ++ [
+              pkgs.actionlint
+              self.packages.${sys}.default
+              self.packages.${sys}.tdd-order-bats
+            ];
             text = ''
               export FRAGMENTS_DIR="${set-and-setting}/setting/integrations/lefthook"
               export ASSEMBLE_SCRIPT="${set-and-setting}/setting/lib/assemble-lefthook.sh"
