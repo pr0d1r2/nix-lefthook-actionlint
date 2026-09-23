@@ -42,7 +42,7 @@
         in
         set-and-setting.lib.mkDevShells {
           inherit pkgs;
-          basePackages = mat.packages ++ [ self.packages.${sys}.default ];
+          basePackages = mat.packages ++ [ pkgs.actionlint self.packages.${sys}.default ];
           settingHook = ''
             ${self.packages.${sys}.setting}/bin/sync-setting .
             _assemble_out="$(mktemp -d)"
