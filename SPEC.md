@@ -69,3 +69,4 @@ Lefthook-compatible actionlint wrapper as Nix flake. Filter YAML args, run actio
 | B9 | 2026-08-18 | Shared actionlint check passed a scalar regex to the current nixpkgs `sourceByRegex` API, preventing flake evaluation | Keep the actions check enabled with a local equivalent using the list-valued regex API |
 | B10 | 2026-08-18 | Linter-coverage guard required its exemptions manifest, but the repository did not include one | Add the empty `config/linter-coverage-exemptions.yml` manifest |
 | B11 | 2026-08-18 | Nix formatting and the required bug-history entry pushed `flake/default.nix` and `SPEC.md` beyond their 4 KiB limits | Raise only the `.nix` and `.md` limits to 8 KiB while retaining file-size enforcement |
+| B12 | 2026-09-23 | Generated pre-push hooks invoked unavailable `lefthook-tdd-order-bats`, causing CI to exit 127 after the Bats tests passed | Remove the stale hook entry; retain the supported Bats parse and unit checks |
