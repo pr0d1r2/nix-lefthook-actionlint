@@ -59,6 +59,7 @@
           inherit pkgs;
           basePackages = mat.packages ++ [
             pkgs.actionlint
+            pkgs.bats
             self.packages.${sys}.default
             self.packages.${sys}.tdd-order-bats
           ];

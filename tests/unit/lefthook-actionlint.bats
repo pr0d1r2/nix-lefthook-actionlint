@@ -1,10 +1,15 @@
 #!/usr/bin/env bats
 
 setup() {
-    load "${BATS_LIB_PATH}/bats-support/load.bash"
-    load "${BATS_LIB_PATH}/bats-assert/load.bash"
-
     TMP="$BATS_TEST_TMPDIR"
+}
+
+assert_success() {
+    [ "$status" -eq 0 ]
+}
+
+assert_failure() {
+    [ "$status" -ne 0 ]
 }
 
 @test "no args exits 0" {
