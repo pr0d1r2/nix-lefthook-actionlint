@@ -12,7 +12,7 @@ pre-commit:
       run: lefthook-git-no-local-paths {staged_files}
     nix-flake-check:
       glob: "*.nix"
-      run: timeout ${LEFTHOOK_NIX_FLAKE_CHECK_TIMEOUT:-60} nix flake check
+      run: timeout ${LEFTHOOK_NIX_FLAKE_CHECK_TIMEOUT:-600} nix flake check
     actionlint:
       glob: ".github/workflows/*.{yml,yaml}"
       run: timeout ${LEFTHOOK_ACTIONLINT_TIMEOUT:-30} lefthook-actionlint {staged_files}
@@ -56,8 +56,14 @@ pre-push:
     linter-coverage:
       run: timeout ${LEFTHOOK_LINTER_COVERAGE_FULL_TIMEOUT:-30} lefthook-linter-coverage-full
     nix-flake-check:
-      glob: "*.nix"
-      run: timeout ${LEFTHOOK_NIX_FLAKE_CHECK_TIMEOUT:-60} nix flake check
+      # NO glob. `nix flake check` validates the WHOLE tree -- markdown, YAML,
+      # shell, dictionaries, the emitted lefthook config -- so gating it on
+      # `*.nix` let every non-nix change reach CI ungated by it. CI runs it
+      # unconditionally, which made green-local/red-CI structural for exactly
+      # the changes least likely to be suspected: a config edit, a doc, a
+      # fragment. Pre-commit keeps the glob; this is the gate before the push,
+      # and it costs what CI costs.
+      run: timeout ${LEFTHOOK_NIX_FLAKE_CHECK_TIMEOUT:-600} nix flake check
     actionlint:
       glob: ".github/workflows/*.{yml,yaml}"
       run: timeout ${LEFTHOOK_ACTIONLINT_TIMEOUT:-30} lefthook-actionlint {push_files}
