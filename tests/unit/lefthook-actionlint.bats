@@ -117,3 +117,11 @@ YML
     run lefthook-actionlint "$TMP/.github/workflows/ci.yml" "$TMP/data.txt"
     assert_success
 }
+
+@test "lefthook-remote.yml calls the lefthook-actionlint wrapper in every stage" {
+    remote="$BATS_TEST_DIRNAME/../../lefthook-remote.yml"
+    run grep -c 'timeout .* lefthook-actionlint {' "$remote"
+    [ "$output" -eq 2 ]
+    run grep -E 'timeout .* actionlint \{' "$remote"
+    assert_failure
+}
