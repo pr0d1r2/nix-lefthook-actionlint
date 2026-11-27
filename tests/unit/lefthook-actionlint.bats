@@ -118,10 +118,32 @@ YML
     assert_success
 }
 
-@test "lefthook-remote.yml calls the lefthook-actionlint wrapper in every stage" {
+remote_run_with_stubs() {
     remote="$BATS_TEST_DIRNAME/../../lefthook-remote.yml"
-    run grep -c 'timeout .* lefthook-actionlint {' "$remote"
-    [ "$output" -eq 2 ]
-    run grep -E 'timeout .* actionlint \{' "$remote"
-    assert_failure
+    sh_bin="$(command -v sh)"
+    printf '#!%s\nshift\nexec "$@"\n' "$sh_bin" > "$TMP/bin/timeout"
+    chmod +x "$TMP/bin/"*
+    ran=0
+    while IFS= read -r cmd; do
+        cmd="${cmd//\{staged_files\}/ci.yml}"
+        cmd="${cmd//\{push_files\}/ci.yml}"
+        run env PATH="$TMP/bin" "$sh_bin" -c "$cmd"
+        assert_success
+        [ "$output" = "$1 ci.yml" ]
+        ran=$((ran + 1))
+    done < <(sed -n 's/^ *run: //p' "$remote")
+    [ "$ran" -eq 2 ]
+}
+
+@test "lefthook-remote.yml calls the lefthook-actionlint wrapper in every stage" {
+    mkdir -p "$TMP/bin"
+    printf '#!%s\necho "wrapper $*"\n' "$(command -v sh)" > "$TMP/bin/lefthook-actionlint"
+    printf '#!%s\necho "bare $*"\n' "$(command -v sh)" > "$TMP/bin/actionlint"
+    remote_run_with_stubs wrapper
+}
+
+@test "lefthook-remote.yml falls back to bare actionlint without the wrapper" {
+    mkdir -p "$TMP/bin"
+    printf '#!%s\necho "bare $*"\n' "$(command -v sh)" > "$TMP/bin/actionlint"
+    remote_run_with_stubs bare
 }
