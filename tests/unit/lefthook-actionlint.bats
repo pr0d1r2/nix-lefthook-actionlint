@@ -123,16 +123,15 @@ remote_run_with_stubs() {
     sh_bin="$(command -v sh)"
     printf '#!%s\nshift\nexec "$@"\n' "$sh_bin" > "$TMP/bin/timeout"
     chmod +x "$TMP/bin/"*
-    ran=0
+    seen=""
     while IFS= read -r cmd; do
-        cmd="${cmd//\{staged_files\}/ci.yml}"
-        cmd="${cmd//\{push_files\}/ci.yml}"
+        cmd="${cmd//\{staged_files\}/staged.yml}"
+        cmd="${cmd//\{push_files\}/push.yml}"
         run env PATH="$TMP/bin" "$sh_bin" -c "$cmd"
         assert_success
-        [ "$output" = "$1 ci.yml" ]
-        ran=$((ran + 1))
+        seen="$seen$output;"
     done < <(sed -n 's/^ *run: //p' "$remote")
-    [ "$ran" -eq 2 ]
+    [ "$seen" = "$1 staged.yml;$1 push.yml;" ]
 }
 
 @test "lefthook-remote.yml calls the lefthook-actionlint wrapper in every stage" {
